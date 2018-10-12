@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:text="Draw lots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonDrawLots"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Cast moon blocks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonCastBlocks"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageViewMoonBlockLeft"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginLeft="32dp"
+            android:background="@drawable/cast_blocks_left_animation"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageViewMoonBlockRight"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/cast_blocks_right_animation"/>
+
+        <ImageView
+            android:id="@+id/imageViewDrawLot"
+            android:layout_width="200dp"
+            android:layout_height="350dp"
+            android:background="@drawable/draw_lots_animation"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/imageViewCastBlocks"
+            android:layout_width="200dp"
+            android:layout_height="350dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+</LinearLayout>
