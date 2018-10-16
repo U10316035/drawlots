@@ -70,6 +70,7 @@ public class PlayGamesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 tempValue = 0;
                 imgDrawLotPic.setVisibility(View.GONE);
+                imgCastBlockPic.setVisibility(View.GONE);
                 imgMoonBlockLeft.setVisibility(View.VISIBLE);
                 imgMoonBlockRight.setVisibility(View.VISIBLE);
                 imgMoonBlockLeft.setBackground(ContextCompat.getDrawable(PlayGamesActivity.this, R.drawable.cast_blocks_left_animation));
@@ -118,6 +119,14 @@ public class PlayGamesActivity extends AppCompatActivity {
                     ((AnimationDrawable) imgDrawLotPic.getBackground()).stop();
                     isStarted = false;
                 }
+            }
+
+        });
+
+        imgCastBlockPic.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                imgCastBlockPic.setVisibility(View.GONE);
             }
 
         });
@@ -216,7 +225,7 @@ public class PlayGamesActivity extends AppCompatActivity {
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-
+                    int which = -1;
                     int randomPic1 = (int) (Math.random() * 4);
                     int randomPic2 = (int) (Math.random() * 4);
 
@@ -257,14 +266,40 @@ public class PlayGamesActivity extends AppCompatActivity {
                             break;
                         }
                     }
-
-                    if ((randomPic1 + randomPic2) % 2 == 0) {
+                    int sum = (randomPic1 + randomPic2);
+                    if (sum % 2 == 0) {
                         new LogHelper().i("擲筊", "笑筊");
+                        if(sum == 2){
+                            which = 1;
+                        }else{
+                            which = 2;
+                        }
                     } else {
                         new LogHelper().i("擲筊", "聖筊");
+                        which = 0;
                     }
-                    imgMoonBlockLeft.clearAnimation();
-                    imgMoonBlockRight.clearAnimation();
+
+                    final Timer t = new Timer();
+                    final Handler handler = new Handler();
+                    final int sendWhich = which;
+
+                    t.schedule(new TimerTask(){
+                        @Override
+                        public void run(){
+                            handler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    imgMoonBlockLeft.clearAnimation();
+                                    imgMoonBlockRight.clearAnimation();
+                                    imgMoonBlockLeft.setVisibility(View.GONE);
+                                    imgMoonBlockRight.setVisibility(View.GONE);
+                                    showWhichPic(sendWhich);
+                                    t.cancel();
+                                }
+                            });
+                        }
+                    }, 2000, 2000);
+
                 }
             }
 
@@ -307,4 +342,22 @@ public class PlayGamesActivity extends AppCompatActivity {
 //                }, 0, 2000);
     }
     //}
+
+    private void showWhichPic(int which){
+        imgCastBlockPic.setVisibility(View.VISIBLE);
+        switch (which){
+            case 0:{
+                imgCastBlockPic.setImageDrawable(ContextCompat.getDrawable(PlayGamesActivity.this, R.drawable.cast_moon_block0));
+                break;
+            }
+            case 1:{
+                imgCastBlockPic.setImageDrawable(ContextCompat.getDrawable(PlayGamesActivity.this, R.drawable.cast_moon_block1));
+                break;
+            }
+            case 2:{
+                imgCastBlockPic.setImageDrawable(ContextCompat.getDrawable(PlayGamesActivity.this, R.drawable.cast_moon_block2));
+                break;
+            }
+        }
+    }
 }
