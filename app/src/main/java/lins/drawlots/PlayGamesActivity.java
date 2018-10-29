@@ -1,5 +1,6 @@
 package lins.drawlots;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ public class PlayGamesActivity extends AppCompatActivity {
     private ImageView imgCastBlockPic;
     private ImageView imgMoonBlockLeft;
     private ImageView imgMoonBlockRight;
+    private ImageView imgLot;
     private Button btnDrawLots;
     private Button btnCastBlocks;
     private boolean isStarted = false;
@@ -48,6 +50,7 @@ public class PlayGamesActivity extends AppCompatActivity {
         imgCastBlockPic = (ImageView)findViewById(R.id.imageViewCastBlocks);
         imgMoonBlockLeft = (ImageView)findViewById(R.id.imageViewMoonBlockLeft);
         imgMoonBlockRight = (ImageView)findViewById(R.id.imageViewMoonBlockRight);
+        imgLot = (ImageView)findViewById(R.id.imageViewLot);
         btnDrawLots = (Button)findViewById((R.id.buttonDrawLots));
         btnCastBlocks = (Button)findViewById((R.id.buttonCastBlocks));
 
@@ -57,6 +60,7 @@ public class PlayGamesActivity extends AppCompatActivity {
                 imgCastBlockPic.setVisibility(View.GONE);
                 imgMoonBlockLeft.setVisibility(View.GONE);
                 imgMoonBlockRight.setVisibility(View.GONE);
+                imgLot.setVisibility(View.GONE);
                 if(imgDrawLotPic.getVisibility() == View.GONE) {
                     imgDrawLotPic.setVisibility(View.VISIBLE);
                 }else{
@@ -69,8 +73,11 @@ public class PlayGamesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 tempValue = 0;
+                btnCastBlocks.setEnabled(false);
+                btnDrawLots.setEnabled(false);
                 imgDrawLotPic.setVisibility(View.GONE);
                 imgCastBlockPic.setVisibility(View.GONE);
+                imgLot.setVisibility(View.GONE);
                 imgMoonBlockLeft.setVisibility(View.VISIBLE);
                 imgMoonBlockRight.setVisibility(View.VISIBLE);
                 imgMoonBlockLeft.setBackground(ContextCompat.getDrawable(PlayGamesActivity.this, R.drawable.cast_blocks_left_animation));
@@ -112,12 +119,38 @@ public class PlayGamesActivity extends AppCompatActivity {
         imgDrawLotPic.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
+                imgLot.setVisibility(View.GONE);
+                imgDrawLotPic.setBackground(ContextCompat.getDrawable(PlayGamesActivity.this, R.drawable.draw_lots_animation));
                 if(!isStarted) {
                     ((AnimationDrawable) imgDrawLotPic.getBackground()).start();
                     isStarted = true;
                 }else{
                     ((AnimationDrawable) imgDrawLotPic.getBackground()).stop();
+                    imgDrawLotPic.setBackground(ContextCompat.getDrawable(PlayGamesActivity.this, R.drawable.draw_lot4));
                     isStarted = false;
+                    final Timer t = new Timer();
+                    final Handler handler = new Handler();
+
+                    t.schedule(new TimerTask(){
+                        @Override
+                        public void run(){
+                            handler.post(new Runnable(){
+                                @Override
+                                public void run() {
+                                    imgLot.setVisibility(View.VISIBLE);
+                                    t.cancel();
+                                    imgLot.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent();
+                                            intent.setClass(PlayGamesActivity.this, LotFortuneActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }, 2000, 2000);
                 }
             }
 
@@ -132,36 +165,9 @@ public class PlayGamesActivity extends AppCompatActivity {
         });
     }
 
-//    private void rotateFunction(){
-//        int randomDegree1 = (int) (Math.random() * 180) - 90;
-//        int randomDegree2 = (int) (Math.random() * 180) - 90;
-//        rotate(randomDegree1, imgMoonBlockLeft);
-//        rotate(randomDegree2, imgMoonBlockRight);
-//    }
-
-//    private void afterCastBlocks(){
-//        imgMoonBlockLeft.clearAnimation();
-//        Animation translateAnimationL = new TranslateAnimation(0, 100f, 0, 100f);
-//        translateAnimationL.setDuration(1000);
-//        translateAnimationL.setFillAfter(true);
-//        imgMoonBlockLeft.setAnimation(translateAnimationL);
-//        imgMoonBlockLeft.startAnimation(translateAnimationL);
-//
-//        imgMoonBlockRight.clearAnimation();
-//        Animation translateAnimationR = new TranslateAnimation(0, -100f, 0, -100f);
-//        translateAnimationR.setDuration(1000);
-//        translateAnimationR.setFillAfter(true);
-//        imgMoonBlockRight.setAnimation(translateAnimationR);
-//        imgMoonBlockRight.startAnimation(translateAnimationR);
-//    }
-
     private void rotate(final ImageView ig) {
-       // if(times != 0) {
         int randomDegree1 = (int) (Math.random() * 180) - 90;
         int randomDegree2 = (int) (Math.random() * 180) - 90;
-//        int randomDegree3 = (int) (Math.random() * 180) - 90;
-//        int randomDegree4 = (int) (Math.random() * 180) - 90;
-//        int randomDegree5 = (int) (Math.random() * 180) - 90;
         int randomLength = (int) (Math.random() * 160)  - 80;
         while(randomLength == 0) randomLength = (int) (Math.random() * 160)  - 80;
         while(Math.abs(tempValue - randomLength)<=45) randomLength = (int) (Math.random() * 160)  - 80;
@@ -173,36 +179,13 @@ public class PlayGamesActivity extends AppCompatActivity {
                     RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                     RotateAnimation.RELATIVE_TO_SELF, 0.5f);
         rotateAnim1.setDuration(200);
-        //rotateAnim1.setFillAfter(true);
         aniSet.addAnimation(rotateAnim1);
 
         RotateAnimation rotateAnim2 = new RotateAnimation(0.0f, randomDegree2,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f);
         rotateAnim1.setDuration(200);
-        //rotateAnim1.setFillAfter(true);
         aniSet.addAnimation(rotateAnim2);
-
-//        RotateAnimation rotateAnim3 = new RotateAnimation(0.0f, randomDegree3,
-//                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-//                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-//        rotateAnim1.setDuration(200);
-//        //rotateAnim1.setFillAfter(true);
-//        aniSet.addAnimation(rotateAnim3);
-//
-//        RotateAnimation rotateAnim4 = new RotateAnimation(0.0f, randomDegree4,
-//                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-//                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-//        rotateAnim1.setDuration(200);
-//        //rotateAnim1.setFillAfter(true);
-//        aniSet.addAnimation(rotateAnim4);
-//
-//        RotateAnimation rotateAnim5 = new RotateAnimation(0.0f, randomDegree5,
-//                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-//                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-//        rotateAnim1.setDuration(200);
-//        //rotateAnim1.setFillAfter(true);
-//        aniSet.addAnimation(rotateAnim5);
 
         TranslateAnimation translateAnimation = new TranslateAnimation(0, randomLength, 0, randomLength);
         translateAnimation.setDuration(1000);
@@ -217,14 +200,6 @@ public class PlayGamesActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 if(imgMoonBlockRight==ig) {
-                    //((AnimationDrawable) imgMoonBlockLeft.getBackground()).stop();
-                    //((AnimationDrawable) imgMoonBlockRight.getBackground()).stop();
-
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
                     int which = -1;
                     int randomPic1 = (int) (Math.random() * 4);
                     int randomPic2 = (int) (Math.random() * 4);
@@ -270,10 +245,25 @@ public class PlayGamesActivity extends AppCompatActivity {
                     if (sum % 2 == 0) {
                         new LogHelper().i("擲筊", "笑筊");
                         if(sum == 2){
-                            which = 1;
+                            if(randomPic1 == 1){
+                                which = 2;
+                            }else{
+                                which = 1;
+                            }
+                        }else if(sum == 4){
+                            if(randomPic1 == 2){
+                                which = 1;
+                            }else{
+                                which = 2;
+                            }
                         }else{
-                            which = 2;
+                            if(sum == 0){
+                                which = 1;
+                            }else {
+                                which = 2;
+                            }
                         }
+
                     } else {
                         new LogHelper().i("擲筊", "聖筊");
                         which = 0;
@@ -294,6 +284,8 @@ public class PlayGamesActivity extends AppCompatActivity {
                                     imgMoonBlockLeft.setVisibility(View.GONE);
                                     imgMoonBlockRight.setVisibility(View.GONE);
                                     showWhichPic(sendWhich);
+                                    btnCastBlocks.setEnabled(true);
+                                    btnDrawLots.setEnabled(true);
                                     t.cancel();
                                 }
                             });

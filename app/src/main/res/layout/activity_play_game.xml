@@ -57,6 +57,14 @@
             android:layout_height="350dp"
             android:layout_gravity="center_vertical|center_horizontal"
             android:visibility="gone"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/lot"
+            android:id="@+id/imageViewLot"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:visibility="gone"/>
     </FrameLayout>
 
 </LinearLayout>
